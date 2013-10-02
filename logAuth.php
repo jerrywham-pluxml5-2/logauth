@@ -1,16 +1,16 @@
 <?php
 /**
- * Plugin logAuth
+ * Plugin logauth
  *
  * @package	PLX
  * @version	1.1
  * @date	23/07/2012
  * @author	Cyril MAGUIRE
  **/
-class logAuth extends plxPlugin {
+class logauth extends plxPlugin {
 
 	/**
-	 * Constructeur de la classe logAuth
+	 * Constructeur de la classe logauth
 	 *
 	 * @param	default_lang	langue par défaut utilisée par PluXml
 	 * @return	null
@@ -23,7 +23,7 @@ class logAuth extends plxPlugin {
 		# droits pour accèder à la page admin.php du plugin
 		$this->setAdminProfil(PROFIL_ADMIN);
 		# Déclarations des hooks
-		$this->addHook('AdminAuthPrepend', 'AdminAuthPrepend');
+		$this->addHook('AdminAuthPrepend', 'AdminlogauthPrepend');
 	}
 
 	/**
@@ -34,7 +34,7 @@ class logAuth extends plxPlugin {
 	 */
 	public function addInLogFile($str, $action)  {
 		
-		$dh = fopen(PLX_PLUGINS."logAuth/admin.php","a");
+		$dh = fopen(PLX_PLUGINS."logauth/admin.php","a");
 		fputs($dh, "\n".$str."$action\n</pre>\n");
 		fclose($dh);
 	}
@@ -56,13 +56,13 @@ class logAuth extends plxPlugin {
 	 * @return type
 	 */
 	public function archiveLogs() {
-		$entete = file_get_contents(PLX_PLUGINS."logAuth/admin.php",NULL,NULL,0,1018);
-		$archive = file_get_contents(PLX_PLUGINS."logAuth/admin.php",NULL,NULL,1018);
+		$entete = file_get_contents(PLX_PLUGINS."logauth/admin.php",NULL,NULL,0,1019);
+		$archive = file_get_contents(PLX_PLUGINS."logauth/admin.php",NULL,NULL,1019);
 		if (!empty($archive)) {
-			file_put_contents(PLX_PLUGINS."logAuth/history.php", $archive, FILE_APPEND | LOCK_EX);
-			file_put_contents(PLX_PLUGINS."logAuth/admin.php", $entete);
+			file_put_contents(PLX_PLUGINS."logauth/history.php", $archive, FILE_APPEND | LOCK_EX);
+			file_put_contents(PLX_PLUGINS."logauth/admin.php", $entete);
 			$_SESSION['info'] = 'Logs archivés';
-			header('location:'.PLX_CORE.'admin/plugin.php?p=logAuth');
+			header('location:'.PLX_CORE.'admin/plugin.php?p=logauth');
 			exit();
 		} else {
 			$_SESSION['error'] = 'Aucun log à archiver';
@@ -75,28 +75,28 @@ class logAuth extends plxPlugin {
 	 * @return file
 	 */
 	public function showHistory(){
-		$entete = file_get_contents(PLX_PLUGINS."logAuth/history.php",NULL,NULL,0,261);
-		$history = file_get_contents(PLX_PLUGINS."logAuth/history.php",NULL,NULL,261);
+		$entete = file_get_contents(PLX_PLUGINS."logauth/history.php",NULL,NULL,0,262);
+		$history = file_get_contents(PLX_PLUGINS."logauth/history.php",NULL,NULL,262);
 		if (!empty($history)) {
 			echo $entete.$history;
 		} else {
 			$_SESSION['error'] = "Aucune archive à afficher";
-			header('location:'.PLX_CORE.'admin/plugin.php?p=logAuth');
+			header('location:'.PLX_CORE.'admin/plugin.php?p=logauth');
 			exit();
 		}
 	}
 
 	public function purgeLogs(){
-		$entete = file_get_contents(PLX_PLUGINS."logAuth/history.php",NULL,NULL,0,261);
-		$history = file_get_contents(PLX_PLUGINS."logAuth/history.php",NULL,NULL,261);
+		$entete = file_get_contents(PLX_PLUGINS."logauth/history.php",NULL,NULL,0,262);
+		$history = file_get_contents(PLX_PLUGINS."logauth/history.php",NULL,NULL,262);
 		if (!empty($history)) {
-			file_put_contents(PLX_PLUGINS."logAuth/history.php", $entete);
+			file_put_contents(PLX_PLUGINS."logauth/history.php", $entete);
 			$_SESSION['info'] = 'Archives des logs supprimées';
-			header('location:'.PLX_CORE.'admin/plugin.php?p=logAuth');
+			header('location:'.PLX_CORE.'admin/plugin.php?p=logauth');
 			exit();
 		} else {
 			$_SESSION['error'] = "Aucune archive à supprimer";
-			header('location:'.PLX_CORE.'admin/plugin.php?p=logAuth');
+			header('location:'.PLX_CORE.'admin/plugin.php?p=logauth');
 			exit();
 		}
 	}
@@ -107,13 +107,13 @@ class logAuth extends plxPlugin {
 	 * @return	stdio
 	 * @author	Cyril MAGUIRE
 	 **/	
-	public function AdminAuthPrepend() {
+	public function AdminlogauthPrepend() {
 		
 		$string = '
 			// Et enfin on note quelques informations de l\'utilisateur 
 			$ip  = htmlspecialchars($_SERVER[\'REMOTE_ADDR\']); // Oui, je suis paranoïaque
 			$usr = htmlspecialchars($_SERVER[\'HTTP_USER_AGENT\']);
-			$h   = print_r($plxAdmin->plxPlugins->aPlugins["logAuth"]->getHostname($ip), true);
+			$h   = print_r($plxAdmin->plxPlugins->aPlugins["logauth"]->getHostname($ip), true);
 
 			# Initialisation variable erreur
 			$error = "";
@@ -141,7 +141,7 @@ class logAuth extends plxPlugin {
 			if(!empty($_GET[\'d\']) AND $_GET[\'d\']==1) {
 
 				// Modification ajoutant au logfile les deconnexions du panel admin
-  				$plxAdmin->plxPlugins->aPlugins["logAuth"]->addInLogFile("<pre>".date("d-m-Y")." @ ".date("H:i")." ".$ip."\n".$usr."\n".$h."\n","Admin disconnect");
+  				$plxAdmin->plxPlugins->aPlugins["logauth"]->addInLogFile("<pre>".date("d-m-Y")." @ ".date("H:i")." ".$ip."\n".$usr."\n".$h."\n","Admin disconnect");
 
 				$_SESSION = array();
 				session_destroy();
@@ -173,7 +173,7 @@ class logAuth extends plxPlugin {
 				if($connected) {
 					// Modification ajoutant les connexions au log 
 				    $_SESSION[\'isConnected\'] = 1;
-				    $plxAdmin->plxPlugins->aPlugins["logAuth"]->addInLogFile("<pre>".date("d-m-Y")." @ ".date("H:i")." ".$ip."\n".$usr."\n".$h."\n","Login successfull");
+				    $plxAdmin->plxPlugins->aPlugins["logauth"]->addInLogFile("<pre>".date("d-m-Y")." @ ".date("H:i")." ".$ip."\n".$usr."\n".$h."\n","Login successfull");
 					header(\'Location: \'.htmlentities($redirect));
 					exit;
 				} else {
@@ -182,7 +182,7 @@ class logAuth extends plxPlugin {
 					// Ajoute les essais de connexions erronés au logfile 
 				    $l = htmlspecialchars($_POST[\'login\']);
 				    $pwd = htmlspecialchars($_POST[\'password\']);
-				    $plxAdmin->plxPlugins->aPlugins["logAuth"]->addInLogFile("<pre class=\"failed\">".date("d-m-Y")." @ ".date("H:i")." ".$ip."\n".$usr."\n".$h."\n","Login failed : $l / $pwd ");
+				    $plxAdmin->plxPlugins->aPlugins["logauth"]->addInLogFile("<pre class=\"failed\">".date("d-m-Y")." @ ".date("H:i")." ".$ip."\n".$usr."\n".$h."\n","Login failed : $l / $pwd ");
 				}
 			}
 			return true;

@@ -1,4 +1,4 @@
-<a href="plugin.php?p=logAuth">Retour à la page des logs</a></p>
+<a href="plugin.php?p=logauth">Retour à la page des logs</a></p>
 <style type="text/css">
 	pre {
 		border: 1px solid #b6b1b3;

@@ -24,16 +24,16 @@ if (isset($_GET['history']) && $_GET['history'] == true) {
 </style>
 <ul>
 	<li>
-		<a href="<?php echo PLX_CORE ?>admin/plugin.php?p=logAuth&rec=true">Archiver les logs</a>
+		<a href="<?php echo PLX_CORE ?>admin/plugin.php?p=logauth&rec=true">Archiver les logs</a>
 	</li>
 	<li>
-		<a href="<?php echo PLX_CORE ?>admin/plugin.php?p=logAuth&history=true">Historique des logs</a>
+		<a href="<?php echo PLX_CORE ?>admin/plugin.php?p=logauth&history=true">Historique des logs</a>
 	</li>
 	<li>
 		----------------------------------------
 	</li>
 	<li>
-		<a href="<?php echo PLX_CORE ?>admin/plugin.php?p=logAuth&purge=true" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ces archives ? Cette action est irréversible !');">Purger l'historique des logs</a>
+		<a href="<?php echo PLX_CORE ?>admin/plugin.php?p=logauth&purge=true" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ces archives ? Cette action est irréversible !');">Purger l'historique des logs</a>
 	</li>
 </ul>
 <h1>Fichier de log</h1>
